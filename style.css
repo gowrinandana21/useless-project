@@ -8,8 +8,8 @@ body {
 /* The video element for face detection */
 #video {
     position: fixed;
-    top: 10px;
-    left: 10px;
+    bottom: 10px;
+    right: 10px;
     width: 160px; /* Small preview for debugging */
     height: 120px;
     border-radius: 0.5rem;

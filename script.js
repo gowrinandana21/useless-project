@@ -1,4 +1,3 @@
-// --- DOM Element Selection ---
 const video = document.getElementById('video');
 const audioPlayer = document.getElementById('audio-player');
 const mp3Upload = document.getElementById('mp3-upload');
@@ -13,14 +12,14 @@ const geminiButton = document.getElementById('gemini-button');
 const geminiResponseContainer = document.getElementById('gemini-response-container');
 const geminiResponse = document.getElementById('gemini-response');
 const geminiLoading = document.getElementById('gemini-loading');
+const tempoDisplay = document.getElementById('tempo-display');
 
-// --- State Management ---
 let musicReady = false;
 let faceModelsReady = false;
 let musicIsPlaying = false;
 let detectionInterval;
+let noFaceCounter = 0;
 
-// --- 1. Load Face Detection Models ---
 async function loadModels() {
     const MODEL_URL = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights';
     try {
@@ -35,7 +34,6 @@ async function loadModels() {
     }
 }
 
-// --- 2. Start Webcam ---
 async function startWebcam() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
@@ -47,7 +45,6 @@ async function startWebcam() {
     }
 }
 
-// --- 3. Handle Music Upload ---
 mp3Upload.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file && file.type === 'audio/mpeg') {
@@ -55,7 +52,6 @@ mp3Upload.addEventListener('change', (event) => {
         audioPlayer.src = fileURL;
         musicReady = true;
         
-        // Clean up the filename to be a better prompt
         songTitle.textContent = file.name.replace(/\.mp3$/i, '').replace(/_/g, ' ');
         songArtist.textContent = "Your Uploaded Song";
         
@@ -74,7 +70,6 @@ mp3Upload.addEventListener('change', (event) => {
     }
 });
 
-// --- 4. Core Face Detection Logic ---
 function startFaceDetection() {
     if (detectionInterval) clearInterval(detectionInterval);
     detectionInterval = setInterval(async () => {
@@ -83,17 +78,37 @@ function startFaceDetection() {
         const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions());
 
         if (detections.length > 0) {
-            if (musicReady && !musicIsPlaying) playMusic();
+            noFaceCounter = 0;
+            if (musicReady && !musicIsPlaying) {
+                playMusic();
+            }
+
+            const face = detections[0];
+            const videoWidth = video.getBoundingClientRect().width;
+            const faceCenterX = face.detection.box.x + face.detection.box.width / 2;
+            
+            // **FIXED LOGIC**: Invert the percentage to account for the mirrored video
+            const positionPercent = 1 - (faceCenterX / videoWidth);
+
+            const playbackRate = 0.5 + (positionPercent * 1.5); 
+            
+            audioPlayer.playbackRate = playbackRate;
+            tempoDisplay.textContent = `Tempo: ${playbackRate.toFixed(2)}x`;
+
         } else {
-            if (musicIsPlaying) pauseMusic();
+            noFaceCounter++;
+            if (musicIsPlaying && noFaceCounter > 3) {
+                pauseMusic();
+                audioPlayer.playbackRate = 1.0;
+                tempoDisplay.textContent = `Tempo: 1.00x`;
+            }
         }
-    }, 500);
+    }, 200);
 }
 
-// --- 5. Gemini API Call ---
-geminiButton.addEventListener('click', getSongInfo);
+geminiButton.addEventListener('click', getSnobbyCritique);
 
-async function getSongInfo() {
+async function getSnobbyCritique() {
     const currentSongTitle = songTitle.textContent;
     if (!currentSongTitle || currentSongTitle === 'No Song Selected') return;
 
@@ -101,9 +116,9 @@ async function getSongInfo() {
     geminiResponse.textContent = '';
     geminiLoading.style.display = 'flex';
     
-    const prompt = `Tell me a short, interesting fact or a mini-bio about the song or artist for "${currentSongTitle}". Keep it concise and engaging, around 2-3 sentences.`;
+    const prompt = `Act as a funny and sarcastic music critic. Write a short, hilarious critique of the song "${currentSongTitle}". Keep it to 2-3 sentences and use simple, everyday English. The tone should be funny and a little bit insulting.`;
     
-    const apiKey = "AIzaSyAniKDwfqh8K_QDQ3tr7T15fAc-22dcD7E"; // IMPORTANT: Paste your API key here!
+    const apiKey = "AIzaSyAniKDwfqh8K_QDQ3tr7T15fAc-22dcD7E";
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
     
     const payload = {
@@ -122,28 +137,22 @@ async function getSongInfo() {
         }
         
         const result = await response.json();
-        
         const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
         if (text) {
-            // Check if the response indicates it couldn't find the song
-            if (text.toLowerCase().includes("i don't have any information") || text.toLowerCase().includes("rather than the name of a specific song")) {
-                 geminiResponse.textContent = "I couldn't find any info for that title. Try renaming the file to something more specific, like 'Artist - Song Title'.";
-            } else {
-                geminiResponse.textContent = text;
-            }
+            geminiResponse.textContent = text;
         } else {
             throw new Error("No content found in API response.");
         }
 
     } catch (error) {
         console.error("Gemini API Error:", error);
-        geminiResponse.textContent = "Sorry, I couldn't fetch info for this song right now. Check the console for errors.";
+        geminiResponse.textContent = "Looks like my brain is too big to think about this song. Try again.";
     } finally {
         geminiLoading.style.display = 'none';
     }
 }
 
-// Utility for fetch with exponential backoff
 async function fetchWithBackoff(url, options, retries = 3, delay = 1000) {
     for (let i = 0; i < retries; i++) {
         try {
@@ -159,7 +168,6 @@ async function fetchWithBackoff(url, options, retries = 3, delay = 1000) {
     }
 }
 
-// --- Music Control Functions ---
 function playMusic() {
     audioPlayer.play().catch(e => console.error("Audio play failed:", e));
     musicIsPlaying = true;
@@ -178,7 +186,6 @@ function pauseMusic() {
     visualizer.classList.remove('pulse-animation', 'opacity-70');
 }
 
-// --- UI Update Functions ---
 function updateLoadingState() {
     if (faceModelsReady && video.srcObject) {
         loadingModal.style.opacity = '0';
@@ -187,12 +194,10 @@ function updateLoadingState() {
     }
 }
 
-// --- Initializer ---
 async function initialize() {
     await loadModels();
     await startWebcam();
     video.addEventListener('loadeddata', updateLoadingState);
 }
 
-// Start the application
 initialize();

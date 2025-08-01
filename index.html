@@ -3,89 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Don't Look Away Music Player ✨</title>
+    <title>Sun Lo Na ✨</title>
     
-    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     
-    <!-- Link to your new CSS file -->
     <link rel="stylesheet" href="style.css">
     
-    <!-- face-api.js for face detection -->
     <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 </head>
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen py-10">
+<body class="bg-gray-900 text-white">
 
-    <!-- Main Application Container -->
-    <div id="app-container" class="w-full max-w-2xl mx-auto p-4 sm:p-6">
-        <div class="bg-gray-800/50 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-gray-700">
-            
-            <!-- Album Art and Visualizer -->
-            <div class="relative aspect-square w-full flex items-center justify-center p-8">
-                <!-- Visualizer Circle -->
-                <div id="visualizer" class="absolute bg-indigo-500 rounded-full w-3/4 h-3/4 transition-all opacity-0"></div>
+    <nav class="bg-gray-800/70 backdrop-blur-lg shadow-lg border-b border-gray-700 sticky top-0 z-40">
+        <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center">
+                <img class="h-10 w-auto" src="assets/logo.png" alt="Sun Lo Na Logo">
+                <span class="ml-3 font-bold text-xl text-white">Sun Lo Na</span>
+            </div>
+            </div>
+    </nav>
+
+    <main class="flex items-center justify-center min-h-[calc(100vh-64px)] py-10">
+        <div id="app-container" class="w-full max-w-2xl mx-auto p-4 sm:p-6">
+            <div class="bg-gray-800/50 backdrop-blur-xl rounded-2xl shadow-2xl overflow-hidden border border-gray-700">
                 
-                <!-- Album Art Image -->
-                <img id="album-art" src="https://placehold.co/400x400/111827/4f46e5?text=+" class="relative w-full h-full object-cover rounded-full shadow-lg border-4 border-gray-700 transition-all" alt="Album Art">
-            </div>
-
-            <!-- Music Info -->
-            <div class="p-6 text-center">
-                <h1 id="song-title" class="text-2xl font-bold truncate">No Song Selected</h1>
-                <p id="song-artist" class="text-md text-gray-400">Upload an MP3 to begin</p>
-            </div>
-
-            <!-- Status Indicator -->
-            <div id="status-indicator" class="px-6 py-4 bg-gray-900/50 border-t border-b border-gray-700">
-                <p id="status-text" class="text-center font-semibold text-lg text-amber-400 tracking-wider">LOOK AT THE CAMERA TO PLAY</p>
-            </div>
-
-            <!-- Controls -->
-            <div class="p-6 space-y-4">
-                <label for="mp3-upload" class="cursor-pointer w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
-                    <span>Upload New Song</span>
-                </label>
-                <input type="file" id="mp3-upload" class="hidden" accept="audio/mpeg">
-                
-                <!-- Gemini API Feature Button -->
-                <button id="gemini-button" class="hidden w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center transition-all">
-                    ✨ Tell Me About This Song
-                </button>
-            </div>
-            
-            <!-- Gemini Response Area -->
-            <div id="gemini-response-container" class="hidden p-6 border-t border-gray-700 bg-gray-900/50">
-                 <div id="gemini-loading" class="hidden items-center justify-center">
-                    <div class="spinner w-6 h-6 rounded-full border-2 border-transparent"></div>
-                    <p class="ml-3">✨ Gemini is thinking...</p>
+                <div class="relative aspect-square w-full flex items-center justify-center p-8">
+                    <div id="visualizer" class="absolute bg-indigo-500 rounded-full w-3/4 h-3/4 transition-all opacity-0"></div>
+                    <img id="album-art" src="https://placehold.co/400x400/111827/4f46e5?text=+" class="relative w-full h-full object-cover rounded-full shadow-lg border-4 border-gray-700 transition-all" alt="Album Art">
                 </div>
-                <p id="gemini-response" class="text-gray-300 text-sm"></p>
-            </div>
 
+                <div class="p-6 text-center">
+                    <h1 id="song-title" class="text-2xl font-bold truncate">No Song Selected</h1>
+                    <p id="song-artist" class="text-md text-gray-400">Upload an MP3 to begin</p>
+                </div>
+
+                <div id="status-indicator" class="px-6 py-4 bg-gray-900/50 border-t border-b border-gray-700 text-center">
+                    <p id="status-text" class="font-semibold text-lg text-amber-400 tracking-wider">LOOK AT THE CAMERA TO PLAY</p>
+                    <p id="tempo-display" class="text-sm text-cyan-400 mt-1">Tempo: 1.00x</p>
+                </div>
+
+                <div class="p-6 space-y-4">
+                    <label for="mp3-upload" class="cursor-pointer w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <span>Upload New Song</span>
+                    </label>
+                    <input type="file" id="mp3-upload" class="hidden" accept="audio/mpeg">
+                    
+                    <button id="gemini-button" class="hidden w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center transition-all">
+                        🧐 Judge My Taste
+                    </button>
+                </div>
+                
+                <div id="gemini-response-container" class="hidden p-6 border-t border-gray-700 bg-gray-900/50">
+                     <div id="gemini-loading" class="hidden items-center justify-center">
+                         <div class="spinner w-6 h-6 rounded-full border-2 border-transparent"></div>
+                         <p class="ml-3">🧐 Judging your questionable choice...</p>
+                     </div>
+                    <p id="gemini-response" class="text-gray-300 text-sm italic"></p>
+                </div>
+
+            </div>
+            <p class="text-center text-gray-500 text-xs mt-4">Camera preview is in the bottom-right corner.</p>
         </div>
-        <p class="text-center text-gray-500 text-xs mt-4">A webcam preview will appear in the top-left corner.</p>
-    </div>
+    </main>
     
-    <!-- Hidden Video and Audio Elements -->
     <video id="video" autoplay muted playsinline></video>
     <audio id="audio-player" src=""></audio>
 
-    <!-- Loading Modal -->
     <div id="loading-modal" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex flex-col items-center justify-center z-50 transition-opacity">
         <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4 animate-spin" style="border-top-color: #6366f1;"></div>
         <h2 class="text-center text-white text-xl font-semibold">Initializing...</h2>
         <p id="loading-text" class="w-1/3 text-center text-gray-400 mt-2">Loading face detection models. Please wait.</p>
     </div>
 
-    <!-- Link to your new JavaScript file -->
-    <script src="script.js" defer></script>
+    <script src="script.js" defer></_>
 </body>
 </html>
