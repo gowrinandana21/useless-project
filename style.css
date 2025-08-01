@@ -1,0 +1,48 @@
+/* Custom styles for a polished look */
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* The video element for face detection */
+#video {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 160px; /* Small preview for debugging */
+    height: 120px;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transform: scaleX(-1); /* Mirror effect */
+    z-index: 100;
+}
+
+/* Pulsing visualizer animation */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+.pulse-animation {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Smooth transitions for UI elements */
+.transition-all {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Spinner for Gemini loading */
+.spinner {
+    border-top-color: #6366f1;
+    animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
