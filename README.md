@@ -44,26 +44,32 @@ For Hardware:
 ### Implementation
 For Software:
 # Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/gowrinandana21/useless-project.git
-[commands]
+No installation required!
 
-# Run
-[commands]
+Just **download or clone the repository** and open the HTML file in your browser.
 
-### Project Documentation
-For Software:
+#### ▶️ How to Run
+
+1. Open the project folder.
+2. Double-click on `index.html`.
+3. **Allow camera access** when prompted.
+4. Upload your favorite song and make eye contact to play. Look away and it pauses.
+
+> 💡 Tip: If the webcam doesn't work, use **Live Server** in VS Code or run it on localhost
 
 # Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+### 🟢 Initial Phase – App Interface Before Upload
+![Screenshot1 - Initial Phase](https://github.com/user-attachments/assets/b83e8312-402b-462e-9308-431f8186e5b8)
+*The main interface before uploading a music file or accessing the webcam.*
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+### 🟢 Face Detected – Music Plays and Judgement Begins
+![Screenshot2 - Face Detected](https://github.com/user-attachments/assets/3c7933cf-229c-440b-ace2-38fa5431648f)
+*When the user looks directly at the camera, face detection is successful and music starts playing.  
+It also judges the music you picked and gives a playful comment on your taste.*
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+### 🔴 Face Not Detected – Music Pauses
+![Screenshot3 - Face Not Detected](https://github.com/user-attachments/assets/3828083d-f489-45a4-90cb-57edf9e29f41)
+*When the user looks away from the camera or face is not visible, the music automatically pauses.*
 
 ### Project Demo
 # Video
@@ -71,8 +77,8 @@ https://drive.google.com/file/d/17ei25ozZ8hYVaRICkzFi59cCptqO7fQU/view?usp=shari
 The video demonstrates the working of our website Sun Lo Na.
 
 ## Team Contributions
-- Aneena Cherian: 
-- Gowri Nandana: 
+- Aneena Cherian: Handled frontend and development.
+- Gowri Nandana: Integrated Gemini API and planned overall structure.
 
 
 ---
