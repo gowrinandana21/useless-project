@@ -55,7 +55,8 @@ mp3Upload.addEventListener('change', (event) => {
         songTitle.textContent = file.name.replace(/\.mp3$/i, '').replace(/_/g, ' ');
         songArtist.textContent = "Your Uploaded Song";
         
-        albumArt.src = 'https://placehold.co/400x400/1f2937/818cf8?text=Ready!';
+       albumArt.src = 'assets/music.gif';
+
         albumArt.classList.add('border-indigo-500');
         
         geminiButton.classList.remove('hidden');
