@@ -43,6 +43,18 @@ For Hardware:
 
 ### Implementation
 For Software:
+
+#### 🎯 Core Logic
+- The website uses your webcam to detect your face using **Face API.js**, a browser-based face detection library.
+- When your face is visible and you're looking straight at the camera, the music starts playing.
+- If you look away or your face is no longer detected, the music automatically pauses.
+- It also playfully "judges" your music by displaying funny messages based on the song name.
+
+#### 🖥️ How It Works
+- A simple HTML interface lets you upload and play your favorite MP3 file.
+- JavaScript controls the audio and runs face detection using your webcam.
+- The logic continuously checks for face presence in real-time.
+
 # Installation
 No installation required!
 
